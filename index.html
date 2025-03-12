@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サンキャリア 利用者フォローアップシステム</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2ecc71;
+            --secondary-dark: #27ae60;
+            --warning: #e74c3c;
+            --warning-dark: #c0392b;
+            --gray-light: #f5f5f5;
+            --gray: #ecf0f1;
+            --gray-dark: #bdc3c7;
+            --text: #34495e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: var(--gray-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 i {
+            margin-right: 0.5rem;
+        }
+
+        nav {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs {
+            display: flex;
+            list-style: none;
+        }
+
+        .tabs li {
+            margin-right: 0.5rem;
+        }
+
+        .tabs a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tabs a:hover, .tabs a.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info .user-name {
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+        }
+
+        .btn-warning:hover {
+            background-color: var(--warning-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .section {
+            margin: 2rem 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 0.5rem;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            border-bottom: 1px solid var(--gray);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .card-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-content {
+            padding: 0.5rem 0;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-dark);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bdc3c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            background-size: 1em;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray);
+            text-align: left;
+        }
+
+        thead th {
+            background-color: var(--gray);
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--gray-light);
+        }
+
+        tr:hover {
+            background-color: var(--gray);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .badge-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .badge-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .priority-high {
+            border-left: 4px solid var(--warning);
+        }
+
+        .priority-medium {
+            border-left: 4px solid var(--primary);
+        }
+
+        .priority-low {
+            border-left: 4px solid var(--secondary);
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-dark);
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .modal-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 0.5rem;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* 追加セクション表示・非表示のスタイル */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* モーダル表示のためのスタイル */
+        .modal-backdrop.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-hands-helping"></i> サンキャリア 利用者フォローアップシステム</h1>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container nav-container">
+            <ul class="tabs">
+                <li><a href="#dashboard" class="tab-link active" data-tab="dashboard-section">ダッシュボード</a></li>
+                <li><a href="#users" class="tab-link" data-tab="users-section">利用者一覧</a></li>
+                <li><a href="#followup" class="tab-link" data-tab="followup-section">フォローアップ</a></li>
+                <li><a href="#history" class="tab-link" data-tab="history-section">相談履歴</a></li>
+                <li><a href="#stats" class="tab-link" data-tab="stats-section">統計</a></li>
+            </ul>
+            <div class="user-info">
+                <span class="user-name">スタッフ: 田中</span>
+                <button class="btn btn-outline btn-sm" id="settings-btn"><i class="fas fa-cog"></i> 設定</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- ダッシュボード -->
+        <div id="dashboard-section" class="page-section active">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-clipboard-list"></i> 本日のフォローアップ</h2>
+                    <button class="btn" id="refresh-followups"><i class="fas fa-sync-alt"></i> 更新</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>優先度</th>
+                                <th>利用者ID</th>
+                                <th>担当者</th>
+                                <th>カテゴリ</th>
+                                <th>フォローアップ内容</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="priority-high">
+                                <td><span class="badge badge-warning">高</span></td>
+                                <td>#01</td>
+                                <td>田中</td>
+                                <td>イライラ（不満・苦情）</td>
+                                <td>[優先] 感情管理のフォロー: 職場でのストレス対処法について気持ちの変化を確認し、ストレス対処法の振り返りと実践状況の確認（※最近の相談頻度が高いため注意）</td>
+                                <td>
+                                    <button class="btn btn-sm record-btn" data-userid="#01"><i class="fas fa-pencil-alt"></i> 記録</button>
+                                </td>
+                            </tr>
+                            <tr class="priority-medium">
+                                <td><span class="badge badge-primary">中</span></td>
+                                <td>#03</td>
+                                <td>鈴木</td>
+                                <td>対人関係</td>
+                                <td>対人関係の状況確認: 同僚とのコミュニケーションの状況改善を確認し、必要に応じてロールプレイや対処法のアドバイス</td>
+                                <td>
+                                    <button class="btn btn-sm record-btn" data-userid="#03"><i class="fas fa-pencil-alt"></i> 記録</button>
+                                </td>
+                            </tr>
+                            <tr class="priority-low">
+                                <td><span class="badge badge-secondary">低</span></td>
+                                <td>#05</td>
+                                <td>高橋</td>
+                                <td>生活リズム</td>
+                                <td>生活習慣の確認: 睡眠時間の改善状況を確認し、睡眠・食事等の規則的な生活の維持方法をアドバイス</td>
+                                <td>
+                                    <button class="btn btn-sm record-btn" data-userid="#05"><i class="fas fa-pencil-alt"></i> 記録</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-chart-pie"></i> 概要</h2>
+                </div>
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">本日のフォローアップ</h3>
+                            <div class="card-icon"><i class="fas fa-tasks"></i></div>
+                        </div>
+                        <div class="card-content">
+                            <p>3件</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#followup" class="btn btn-sm">詳細</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">未対応の相談</h3>
+                            <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        </div>
+                        <div class="card-content">
+                            <p>1件</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#history" class="btn btn-sm">詳細</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">利用者数</h3>
+                            <div class="card-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="card-content">
+                            <p>15人</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#users" class="btn btn-sm">詳細</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 利用者一覧 -->
+        <div id="users-section" class="page-section">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-users"></i> 利用者一覧</h2>
+                    <button class="btn btn-secondary" id="add-user-btn"><i class="fas fa-plus"></i> 利用者追加</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>氏名</th>
+                                <th>年齢</th>
+                                <th>性別</th>
+                                <th>状態</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#01</td>
+                                <td>山田太郎</td>
+                                <td>30</td>
+                                <td>男性</td>
+                                <td> active </td>
+                                <td>
+                                    <button class="btn btn-sm">編集</button>
+                                    <button class="btn btn-sm btn-warning">削除</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#02</td>
+                                <td>佐藤花子</td>
+                                <td>25</td>
+                                <td>女性</td>
+                                <td> active </td>
+                                <td>
+                                    <button class="btn btn-sm">編集</button>
+                                    <button class="btn btn-sm btn-warning">削除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- フォローアップ -->
+        <div id="followup-section" class="page-section">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-list-alt"></i> フォローアップ</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>利用者名</th>
+                                <th>担当者</th>
+                                <th>カテゴリ</th>
+                                <th>内容</th>
+                                <th>優先度</th>
+                                <th>期日</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#01</td>
+                                <td>山田太郎</td>
+                                <td>田中</td>
+                                <td>キャリア</td>
+                                <td>今後のキャリアプランについて</td>
+                                <td>高</td>
+                                <td>2024/04/01</td>
+                                <td>
+                                    <button class="btn btn-sm">編集</button>
+                                    <button class="btn btn-sm btn-warning">完了</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#02</td>
+                                <td>佐藤花子</td>
+                                <td>鈴木</td>
+                                <td>メンタルヘルス</td>
+                                <td>最近のストレス状況について</td>
+                                <td>中</td>
+                                <td>2024/04/05</td>
+                                <td>
+                                    <button class="btn btn-sm">編集</button>
+                                    <button class="btn btn-sm btn-warning">完了</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 相談履歴 -->
+        <div id="history-section" class="page-section">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-history"></i> 相談履歴</h2>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>利用者名</th>
+                                <th>相談日</th>
+                                <th>カテゴリ</th>
+                                <th>内容</th>
+                                <th>担当者</th>
+                                <th>アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#01</td>
+                                <td>山田太郎</td>
+                                <td>2024/03/01</td>
+                                <td>キャリア</td>
+                                <td>キャリアプランの相談</td>
+                                <td>田中</td>
+                                <td><button class="btn btn-sm">詳細</button></td>
+                            </tr>
+                            <tr>
+                                <td>#02</td>
+                                <td>佐藤花子</td>
+                                <td>2024/03/05</td>
+                                <td>メンタルヘルス</td>
+                                <td>ストレスに関する相談</td>
+                                <td>鈴木</td>
+                                <td><button class="btn btn-sm">詳細</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 統計 -->
+        <div id="stats-section" class="page-section">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-chart-bar"></i> 統計</h2>
+                </div>
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 設定モーダル -->
+    <div class="modal-backdrop" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">設定</h2>
+                <button class="modal-close" id="close-settings-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>設定内容をここに記述します。</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">保存</button>
+                <button class="btn btn-secondary" id="cancel-settings">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // タブの切り替え
+            const tabLinks = document.querySelectorAll('.tab-link');
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tab = this.dataset.tab;
+                    const sections = document.querySelectorAll('.page-section');
+                    sections.forEach(section => section.classList.remove('active'));
+                    document.getElementById(tab).classList.add('active');
+                    tabLinks.forEach(tabLink => tabLink.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // 設定モーダルの表示・非表示
+            const settingsBtn = document.getElementById('settings-btn');
+            const settingsModal = document.getElementById('settings-modal');
+            const closeSettingsModalBtn = document.getElementById('close-settings-modal');
+            const cancelSettingsBtn = document.getElementById('cancel-settings');
+
+            settingsBtn.addEventListener('click', function() {
+                settingsModal.classList.add('show');
+            });
+
+            closeSettingsModalBtn.addEventListener('click', function() {
+                settingsModal.classList.remove('show');
+            });
+
+            cancelSettingsBtn.addEventListener('click', function() {
+                settingsModal.classList.remove('show');
+            });
+
+            // ダミーデータ
+            const labels = ['4月', '5月', '6月', '7月', '8月', '9月'];
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: '相談件数',
+                    data: [65, 59, 80, 81, 56, 55],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        });
+    </script>
+</body>
+</html>
